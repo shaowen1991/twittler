@@ -19,6 +19,7 @@
 
 
         $refresh.on('click', function() {
+          $refresh.remove();
           while(index >= 0){
             var tweet = streams.home[index];
             var $tweet = $('<div id="tweets"></div>');
@@ -38,9 +39,10 @@
               $allTweets.prepend($('<br></br>'));
               $allTweets.prepend('@' + username + ' tweets: ');
               for (var i = 0; i < allTweets.length; i++) {
-                var thisTweet = allTweets[i].message + ' ' + allTweets[i].created_at;
+                var thisTweet = allTweets[i].message;
+                var thisTime = $('<p style="font-size: 10px">Time: </p>').append(allTweets[i].created_at);
                 $allTweets.append(thisTweet);
-                $allTweets.append($('<br></br>'));
+                $allTweets.append(thisTime);
 
               }
               $allTweets.appendTo($body);
