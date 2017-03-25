@@ -6,7 +6,7 @@
   </head>
   <body>
 
-    <script>
+    <script id="main">
 
       $(document).ready(function(){
         var $body = $('body');
@@ -15,23 +15,53 @@
         $refresh.appendTo($body);
         $('<br></br><br></br>').appendTo($body);
 
-        var index = streams.home.length - 1;
-
-
+        var startIndex = 0;
         $refresh.on('click', function() {
-          $refresh.remove();
-          while(index >= 0){
+          // window.streams = {};
+          // streams.home = [];
+          // streams.users = {};
+          // streams.users.shawndrost = [];
+          // streams.users.sharksforcheap = [];
+          // streams.users.mracus = [];
+          // streams.users.douglascalhoun = [];
+          // window.users = Object.keys(streams.users); 
+          startIndex = streams.home.length;  
+          for(var i = 0; i < 10; i++){
+            generateRandomTweet();
+          }
+          scheduleNextTweet();
+          display();
+        });
+
+        //$refresh.remove();
+        var display = function (){
+          var index = streams.home.length - 1;
+          // var test = streams.users.mracus;
+          while(index >= startIndex){
             var tweet = streams.home[index];
             var $tweet = $('<div id="tweets"></div>');
-            var $userButton = $('<button type="button" id="user" data-name="'+tweet.user+'">@'+ tweet.user +'</button>');
+            var $userButton = $('<button type="button" id='+tweet.user+' data-name="'+tweet.user+'">@'+ tweet.user +'</button>');
             $tweet.prepend(': ' + tweet.message);
             $tweet.prepend($userButton);
             $tweet.appendTo($body);
-            $('<p style="font-size: 10px">Time: </p>').append(Date($.now())).appendTo($tweet);
+            $('<p style="font-size: 10px"> _____Time: </p>').append(Date($.now())).appendTo($tweet);
             index -= 1;
+            //userbutton
+            $('div #' + tweet.user).on('click', function() {
+              var username = $(this).closest('button').attr('id');
+              nameButton(username);
+            
+            });
+            // var test2 = streams.users.mracus;
+          }
+          // var test3 = streams.users.mracus;
+          $line = $('<p>======================================</p>');
+          $line.appendTo($body);
+        }
 
-            $('div #user').on('click', function() {
-              var username = tweet.user;
+        var nameButton = function(username) {
+              $refresh.remove();
+              //var username = this.closest('button').data('name');
               var allTweets = streams.users[username];
               $('div').remove();
               var $allTweets = $('<div></div>');
@@ -40,15 +70,15 @@
               $allTweets.prepend('@' + username + ' tweets: ');
               for (var i = 0; i < allTweets.length; i++) {
                 var thisTweet = allTweets[i].message;
-                var thisTime = $('<p style="font-size: 10px">Time: </p>').append(allTweets[i].created_at);
+                var thisTime = $('<p style="font-size: 10px">'+username+'_____Time: </p>').append(allTweets[i].created_at);
                 $allTweets.append(thisTweet);
                 $allTweets.append(thisTime);
 
               }
               $allTweets.appendTo($body);
-            });
-          }
-        });
+        }
+        display();
+
 
 
         // $('div #user').on('click', function() {
